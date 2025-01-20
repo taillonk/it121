@@ -6,29 +6,37 @@
 </head>
 <body>
 
-<script>
-    phrase = prompt("Enter a phrase");
-    document.write("You entered -  ", phrase,"./n");
-    // Your pig-latin translation code here
-    
-    let vowels = "aeiou";
-    let firstLetter = phrase.charAt(0);
-    let secondLetter = phrase.charAt(1);
-    let translation="";
+    <script>
+        phrase = (prompt("Enter a phrase")).toLowerCase();
+        document.write("You entered -  ", phrase,". ");
 
-    if (phrase.length < 2){
-        document.write(" ********* The phrase to translate must be at least two characters long. Try again!");
-    }else {
-        if (vowels.includes(firstLetter)){
-            translation = "phrase" + "way"; 
-        }else if (!vowels.includes(firstLetter)){
-            if (!vowels.includes(secondLetter)){
-                translation = phrase.substring(2) + firstLetter + secondLetter + "ay";
+        // Your pig-latin translation code here
+
+        if (phrase.length > 2){
+            let vowels = "aeiou";
+            let firstLetter = phrase.charAt(0);
+            let secondLetter = phrase.charAt(1);
+            let translatedWord="";
+            let phrase_substring="";
+            let response = "Your phrase in piglatin is: ";
+            if (vowels.includes(firstLetter)){
+                translatedWord = "phrase" + "way."; 
+                document.write(response,translatedWord);
+            }else if (!vowels.includes(firstLetter)){
+                if (!vowels.includes(secondLetter)){
+                    phrase_substring = phrase.substring(2) 
+                    translatedWord = phrase_substring + firstLetter + secondLetter + "ay.";
+                    document.write(response,translatedWord);
+                }else{
+                    phrase_substring = phrase.substring(1) 
+                    translatedWord = phrase_substring + firstLetter + "ay.";
+                    document.write(response,translatedWord);
+                }
             }
-            translation = phrase.substring(1) + firstLetter + "ay";
-        }        
-    }
-</script>
+        }else{
+            document.write(" ********* The phrase to translate must be at least two characters long. Try again!");
+        }
+    </script>
 
 </body>
 </html>
