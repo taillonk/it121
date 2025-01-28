@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student grades</title>
+</head>
+<body>
+
+<script>
+    const grades = "jim|25, sue|32, mary|34, ann|22, ted|28, frank|15, lisa|19, mike|30, ahn|26, vishaya|27";
+
+    // Your code here
+    let gradesArray = grades.split(",");
+    let gradesArrayElement = "";
+    let onlyScoresArray = [];
+    let studentName = "";
+    let intGrade = 0;
+    let sum = 0;
+    document.write("Student's name and score:<br>");
+    for(i = 0; i < gradesArray.length; i++){
+        gradesArrayElement = gradesArray[i].trim();
+        gradesArrayElementSplit = gradesArrayElement.split("|");
+        studentName = gradesArrayElementSplit[0];
+        studentName = studentName[0].toUpperCase() + studentName.slice(1);
+        intGrade = parseInt(gradesArrayElementSplit[1]);
+        onlyScoresArray.push(intGrade);
+        document.write(studentName + " - " + intGrade + "<br>");
+    }
+    onlyScoresArray.sort()
+    document.write(" <br>");
+    document.write("Number of Students: " + gradesArray.length + " <br>");
+    document.write("Lowest Grade: ", onlyScoresArray[0] + " <br>" );
+    document.write("Highest Grade: ", onlyScoresArray[onlyScoresArray.length - 1] + " <br>");
+
+    for(let i in onlyScoresArray){
+        sum += onlyScoresArray[i];
+    }
+    document.write("Average Grade: " + (sum / onlyScoresArray.length));
+</script>
+
+</body>
+</html>
