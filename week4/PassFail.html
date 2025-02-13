@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+</head>
+
+<body>
+
+  <h1>Functions & validation</h1>
+
+  <form id="form1" action="#" onsubmit="return validateForm(this);">
+    first name: <input type="text" name="firstname"><br>
+    last name: <input type="text" name="lastname"><br>
+    password: <input type="text" name="password"><br>
+
+    <button>Check</button>
+  </form>
+
+  <hr>
+  <div id="message"></div>
+
+  <script>
+
+    const validateForm = (myForm) => {
+      let message = ""; // mesagge to be displayed to end user.
+      let password = myForm.password.value; // get text of password field
+      let firstname = myForm.firstname.value; // get text of firstname field
+      let lastname = myForm.lastname.value; // get text of lastname field
+
+    // validatePassword function - one upper case, one lower case, 8 char long
+      const validatePassword = password => {
+        let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let lower = "abcdefghijklmnopqrstuvwxyz";
+        let upperFound;
+        let lowerFound;
+        if (password.length >= 8) {
+          for (let i = 0; i < password.length; i++) {
+            let letter = password[i];
+            if (upper.includes(letter)) {
+              upperFound = true;
+              break;
+            }else {
+              upperFound = false;
+            }
+          }
+          for (let i = 0; i < password.length; i++) {
+            let letter = password[i];
+            if (lower.includes(letter)) {
+              lowerFound = true;
+              break;
+            } else {
+              lowerFound = false;
+            }
+          }
+          return (upperFound && lowerFound);
+        }else {
+          return false;
+        }
+      }
+      /* Form validation code goes here
+      */
+      if ((firstname.length == 0) || (lastname.length == 0)){
+          message = "Please enter both your first and lastname in the designated fields to continue.";
+      }else if (validatePassword(password) == false) {
+          message = "You have not entered a valid password. Please ensure your password is at least 8 characters long, and includes at least one uppercase and one lowercase letters.";
+      }else {
+          message = "Success! Thank you, you may continue...";
+      }
+      // use this syntax to update 'message' DIV with appropriate wording
+      $("#message").html(message);
+      return false; // prevent page reload
+        }
+  </script>
+  
+</body>
+</html>
