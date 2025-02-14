@@ -23,7 +23,7 @@
   <script>
 
     const validateForm = (myForm) => {
-      let message = ""; // mesagge to be displayed to end user.
+      let message = ""; // message to be displayed to end user.
       let password = myForm.password.value; // get text of password field
       let firstname = myForm.firstname.value; // get text of firstname field
       let lastname = myForm.lastname.value; // get text of lastname field
@@ -61,13 +61,13 @@
       /* Form validation code goes here
       */
       if ((firstname.length == 0) || (lastname.length == 0)){
-          message = "Please enter both your first and lastname in the designated fields to continue.";
+          message = "Please enter both your first and last name in the designated fields to continue.";
       }else if (validatePassword(password) == false) {
-          message = "You have not entered a valid password. Please ensure your password is at least 8 characters long, and includes at least one uppercase and one lowercase letters.";
+          message = "You have not entered a valid password. Please ensure your password is at least 8 characters long, and includes at least one uppercase and one lowercase letter.";
       }else {
           message = "Success! Thank you, you may continue...";
       }
-      // use this syntax to update 'message' DIV with appropriate wording
+      //Use this syntax to update 'message' DIV with appropriate wording
       $("#message").html(message);
       return false; // prevent page reload
         }
