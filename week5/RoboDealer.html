@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script
+          src="https://code.jquery.com/jquery-3.7.1.min.js"
+          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+          crossorigin="anonymous"></script>
+</head>
+<body>
+
+<h1>Robo Dealer</h1>
+
+  <button onclick="dealHand();">Deal Hand</button>
+
+<hr><div id="card_hand"></div>
+
+<script>
+
+  /* define Card object and deck of cards here */
+  
+  deck = []; //empty deck array. All generated cards will be added to this array
+  suitArray = ["Hearts","Spades","Diamonds","Clubs"]; // array with the different suits to generate deck 
+  card_hand = []; //this is the array of random cards to display.
+  // card object with printName function to display its name
+  function Card (value, suit) {
+    this.value = value;
+    this.suit = suit;  
+    this.printName = function() {
+      if (this.value == 11){
+        return `- Jack of ${this.suit}`;  
+      }else if (this.value == 12){
+        return `- Queen of ${this.suit}`;  
+      }else if (this.value == 13){
+        return `- King of ${this.suit}`;  
+      }else if (this.value == 14){
+        return `- Ace of ${this.suit}`; 
+      }else{
+        return `- ${this.value} of ${this.suit}`;
+      }
+    }
+  }
+  //generate the deck of cards.
+  for (let j = 0; j < suitArray.length; j++) {
+    for (let i = 2; i <= 14; i++) {
+      let suit = suitArray[j];
+      let newCard = new Card(i, suit);
+      deck.push(newCard);
+    }
+  }
+  const dealHand = () => {
+    /* code to deal a card hand goes here */
+    //pick 5 cards from the deck and add them to the card_hand array
+    for (let i = 0; i < 5; i++){
+      let randomNum = Math.floor(Math.random() * 52);
+      let randomCard = deck[randomNum];
+      card_hand.push(randomCard);
+    }
+    let card1 = card_hand[0];
+    let card2 = card_hand[1];
+    let card3 = card_hand[2];
+    let card4 = card_hand[3];
+    let card5 = card_hand[4];
+
+    // update 'card_hand' DIV with appropriate information
+    $("#card_hand").html(`${card1.printName()} <br> ${card2.printName()} <br> ${card3.printName()} <br> ${card4.printName()} <br> ${card5.printName()}`);
+
+    return false; // prevent page reload
+  }
+  card_hand = [];
+</script>
+
+</body>
+</html>
