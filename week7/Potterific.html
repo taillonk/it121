@@ -1,0 +1,140 @@
+<html>
+    <head>
+        <script
+                src="https://code.jquery.com/jquery-3.7.1.min.js"
+                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+                crossorigin="anonymous"></script>
+    </head>
+    <style>
+        .over {
+            background-color: orange;
+        }
+        .selected {
+            background-color: green;
+        }
+    </style>
+
+    <body>
+        <div id="buttons"></div>
+        <table id="charactersTable" border='1'>
+            <tr>
+                <th>name</th>
+                <th>role</th>
+                <th>house</th>
+                <th>gender</th>
+                <th>alignment</th>
+            </tr>
+        </table>
+        <button id="reset_button">reset</button>
+    </body>
+        
+        <script>
+        // list of characters
+        let characters = [
+        {name:"Albus Dumbledore", role:"staff", house:"Gryffindor",gender:"m",alignment:"good"},    
+        {name:"Nymphadora Tonks", role:"", house:"Hufflepuff",gender:"f",alignment:"good"},    
+        {name:"Ron Weasley", role:"student", house:"Gryffindor",gender:"m",alignment:"good"},    
+        {name:"Ginny Weasley", role:"student", house:"Gryffindor",gender:"f",alignment:"good"},    
+        {name:"Hermione Granger", role:"student", house:"Gryffindor",gender:"f",alignment:"good"},    
+        {name:"Mad-eye Moody", role:"staff", house:"",gender:"m",alignment:"good"},    
+        {name:"Prof McGonagall", role:"staff", house:"Gryffindor",gender:"f",alignment:"good"},    
+        {name:"Harry Potter", role:"student", house:"Gryffindor",gender:"m",alignment:"good"},    
+        {name:"Draco Malfoy", role:"student", house:"Slytherin",gender:"m",alignment:"evil"},    
+        {name:"Hagrid", role:"staff", house:"Gryffindor",gender:"m",alignment:"good"},    
+        {name:"Luna Lovegood", role:"student", house:"Ravenclaw",gender:"f",alignment:"good"},    
+        {name:"Voldemort", role:"", house:"Slytherin",gender:"m",alignment:"evil"},    
+        {name:"Bellatrix Lestrange", role:"", house:"Slytherin",gender:"f",alignment:"evil"},           
+        {name:"Severus Snape", role:"staff", house:"Slytherin",gender:"m",alignment:"?"}
+        ];
+
+        $(document).ready(function(){
+
+        // A) CREATE A BUTTON FOR EACH HOUSE PROGRAMATICALLY
+            const createHouseButtons = () => {
+                let houseNames = [];//create array of houseNames
+                let buttonsDiv = document.querySelector("#buttons");//select the HTML div element with id: buttons
+                for (let i = 0; i < characters.length; i++){//loop through the characters array, get the character's house name value and add it to the houseNames array
+                    let house = characters[i].house;
+                    if (houseNames.includes(house) || house.length == 0){//if the house name is already on the array or is blank, don't do anything.
+                        continue;
+                    }else {// otherwise add the house to the houseNames array
+                        houseNames.push(house);
+                    }
+                }
+                for (let i = 0; i < houseNames.length; i++){ //loop through the houseNames array and create a button for each house name.
+                    let button = document.createElement("button"); //create button element
+                    button.setAttribute("id", houseNames[i].toLowerCase()); // set id attribute
+                    button.setAttribute("class", "house_button"); // set class atribute
+                    button.innerHTML = houseNames[i]; // set button text
+                    buttonsDiv.appendChild(button);   // append the button to the buttons div.
+                }
+            }
+
+        // B) FUNCTIONS TO SET AND CLEAR COLOR FORMATTING - DECLARED HERE TO REFERENCE IN CREATE TABLE ROWS FUNCTION
+            //SET
+            const setRowColors = () => {
+                $("tr:visible:odd td").css("background-color", "yellow"); // select all visible odd rows that have a td element as child then change background-color css property
+            }
+            //CLEAR
+            const clearRowColors = () => {
+                $("tr td").css("background-color", "white");  // set row color to white for all rows to clear previous formatting.
+            }
+            
+        // C) ADD A TABLE ROW FOR EACH CHARACTER
+            const createTableRows = () => {
+                const table = $("#charactersTable"); //select the HTML table element with id: charactersTable
+                for (let i = 0; i < characters.length; i++){ //loop through the characters array and create a row for each.
+                    let charRow = document.createElement("TR");                            //create charater row element
+                    let charName = document.createElement("td");                           //create character name cell
+                    let charRole = document.createElement("td");                           //create character role cell
+                    let charHouse = document.createElement("td");                          //create character house cell
+                    let charGender = document.createElement("td");                         //create character gender cell
+                    let charAlignment = document.createElement("td");                      //create character alignment cell
+                    charName.innerHTML = characters[i].name;                               //add text to name cell
+                    charRole.innerHTML = characters[i].role;                               //add text to role cell
+                    charHouse.innerHTML = characters[i].house;                             //add text to house cell
+                    charGender.innerHTML = characters[i].gender;                           //add text to gender cell
+                    charAlignment.innerHTML = characters[i].alignment;                     //add text to alignment cell
+                    charHouse.setAttribute("class", characters[i].house.toLowerCase());    //set class attribute to house cell
+                    charRow.append(charName,charRole,charHouse,charGender,charAlignment);  //append all cells to character row
+                    table.append(charRow);                                                 //append the row to the table
+                    setRowColors(); // set the default alternating color for the rows
+                }
+            }
+
+        // D) ADD CLICK HANDLER TO ALL BUTTONS
+            const addClickHandler = () => {
+            //CLICK HANDLER FOR ALL HOUSE BUTTONS
+                const houseButtons = $(".house_button");
+                houseButtons.on("click", (e) => {
+                    $("tr").show(); // set initial row visibility to show() all rows.
+                    clearRowColors(); // clear initial formatting
+                    if (e.target.innerText == "Gryffindor"){ //if the button click was Gryffindor
+                        $("tr td:nth-child(3)").not(".gryffindor").parent().hide(); //select 3rd td element of each row with class != to filter, then select parent row and hide it.
+                    }else if (e.target.innerText == "Hufflepuff"){ //if the button click was Hufflepuff
+                        $("tr td:nth-child(3)").not(".hufflepuff").parent().hide(); //select 3rd td element of each row with class != to filter, then select parent row and hide it.
+                    }else if (e.target.innerText == "Slytherin"){ //if the button click was Slytherin
+                        $("tr td:nth-child(3)").not(".slytherin").parent().hide(); //select 3rd td element of each row with class != to filter, then select parent row and hide it.
+                    }else{ //if the button click was Ravenclaw
+                        $("tr td:nth-child(3)").not(".ravenclaw").parent().hide(); //select 3rd td element of each row with class != to filter, then select parent row and hide it.
+                    }             
+                    setRowColors(); // set the alternating color for the visible rows
+                });
+                
+            //CLICK HANDLER FOR RESET BUTTON
+                const resetButton = $("#reset_button");
+                resetButton.on("click",(e) => {
+                    $("tr").show(); // set row visibility to show() all rows.
+                    clearRowColors(); // clear initial formatting
+                    setRowColors(); // set the alternating color
+                });
+            }
+
+        //DRIVER CODE:
+            createHouseButtons();
+            createTableRows();
+            addClickHandler();
+        });
+
+        </script>
+</html>
