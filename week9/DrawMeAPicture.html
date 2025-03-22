@@ -1,0 +1,156 @@
+<!doctype html>
+<html> 
+    <head>
+        <meta charset=utf8>
+        <title>Drawing with JavaScript</title>
+         <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div height: 0;"><img id="houses" src="houses.png" height=0 width=400/></div>
+        <div  height: 0;"><img id="tree" src="tree.png" height=0 width=180/></div>
+        <div  height: 0;"><img id="birds" src="birds.png" height=0 width=180/></div>
+        <canvas id="myCanvas" height=750 width=800></canvas>
+        <script>
+            let houseImage = document.getElementById("houses");
+            let treeImage = document.getElementById("tree");
+            let birdsImage = document.getElementById("birds");
+            let canvas = document.getElementById('myCanvas');
+            let context = canvas.getContext('2d');
+            context.fillStyle = "azure";
+            context.rect(0, 0, 800, 500);
+            context.fill();
+            context.stroke();
+            context.beginPath();
+            context.fillStyle = "forestGreen";
+            context.rect(0, 500, 800,50);
+            context.fill();
+            context.stroke();
+            
+            context.beginPath();
+            context.fillStyle = "lightGray";
+            context.rect(0, 550, 800, 150);
+            context.fill();
+            context.stroke();
+
+            context.beginPath();
+            context.fillStyle = "forestGreen";
+            context.rect(0, 700, 800, 50);
+            context.fill();
+            context.stroke();
+
+            context.beginPath();
+            context.strokeStyle = "white";
+            context.lineWidth = 10
+            context.moveTo(1,555);
+            context.lineTo(799,550);
+            context.stroke();
+
+            context.beginPath();
+            context.strokeStyle = "white";
+            context.lineWidth = 10
+            context.moveTo(1,700);
+            context.lineTo(799,700);
+            context.stroke();
+
+            context.beginPath();
+            context.strokeStyle = "yellow";
+            context.moveTo(1,625);
+            context.lineTo(50,625);
+            context.stroke();
+            
+            context.beginPath();
+            context.moveTo(1,625);
+            context.lineTo(60,625);
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(90,625);
+            context.lineTo(150,625);
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(180,625);
+            context.lineTo(240,625);
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(270,625);
+            context.lineTo(330,625);
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(360,625);
+            context.lineTo(420,625);
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(360,625);
+            context.lineTo(420,625);
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(450,625);
+            context.lineTo(510,625);
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(540,625);
+            context.lineTo(600,625);
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(630,625);
+            context.lineTo(690,625);
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(630,625);
+            context.lineTo(690,625);
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(720,625);
+            context.lineTo(780,625);
+            context.stroke();
+
+            context.drawImage(houseImage,110,250,250,350)
+            context.drawImage(treeImage,0,400,200,350)
+            context.drawImage(treeImage,300,400,200,350)
+            context.drawImage(treeImage,450,400,200,350)
+            context.drawImage(treeImage,540,200,200,350)
+            context.drawImage(treeImage,645,200,200,350)
+            context.drawImage(birdsImage,15,30,200,300);
+
+            context.beginPath();
+            context.strokeStyle = "yellow";
+            context.fillStyle = "orange";
+            context.arc(660, 130, 60, 0, 2*Math.PI);
+            context.fill();
+            context.stroke();
+
+            let x = 15;
+            let y= 30;
+            const makeBirdMove = () => {
+                if (x < 350){
+                context.beginPath();
+                context.strokeStyle = "azure";
+                context.fillStyle = "azure";
+                context.rect(x,y,200,300);
+                context.fill();
+                context.stroke();
+                context.drawImage(birdsImage,x,y,200,300);
+                x += 10;
+                } else{
+                    context.rect(x,y,200,300);
+                    context.fill();
+                    context.stroke();
+                    x = 15;
+                }
+            }
+            let myInterval = setInterval(makeBirdMove,500);
+        </script>
+    </body>
+</html>
