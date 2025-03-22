@@ -1,0 +1,20 @@
+{
+  "name": "it122-javascript1",
+  "version": "1.0.0",
+  "description": "HW 10 - Node.js setup",
+  "main": "week10/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taillonk/it121.git"
+  },
+  "author": "Kevin Sanchez Hernandez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/taillonk/it121/issues"
+  },
+  "homepage": "https://github.com/taillonk/it121#readme"
+}
