@@ -1,0 +1,199 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <script
+                src="https://code.jquery.com/jquery-3.7.1.min.js"
+                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+                crossorigin="anonymous"></script>
+    </head>
+<body>
+
+<main id="main-container">
+    <h1>US Daily Weather Forecast</h1>
+    <form id="testform">
+        City: <input type="text" name="city" id= "city">
+        State:
+            <select name="state" id= "state">
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="IA">Iowa</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="ME">Maine</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PR">Puerto Rico</option>
+                <option value="PW">Palau</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+            </select>
+    </form>
+    <button id ="submitButton">submit</button>
+    <button id ="resetButton">reset</button>
+    <div id="forecast">        
+        <table id="weather_table" border='1'></table>
+    </div>
+</main>
+<script>
+    // change to your API
+    // daily forecast API - https://openweathermap.org/forecast16
+    // geocoding API - https://openweathermap.org/api/geocoding-api
+    // NOTE - api docs incorrectly show examples using http instead of https
+    
+    let API_KEY1 = "6614663dc524c3083af8206fb7c0a2ce";
+
+    //convert Kelvin to Fahrenheit
+    const kelvinToF = (value) => {
+        var fahrenheit = (((Number(value) - 273.15)*9)/5) + 32;
+        return fahrenheit.toFixed(2);
+    }
+    //convert unix_timestamp to date
+    const convertDate = (UNIX_timestamp) => {
+        let forecast_date = new Date(UNIX_timestamp * 1000);
+        return forecast_date.toDateString();
+    }
+    //get icon image using icon number.
+    const getIcon = (iconNumber) => {
+        let iconUrl = `https://openweathermap.org/img/w/${iconNumber}.png`;
+        let image = document.createElement("img");
+        image.src = iconUrl;
+        return image;
+    }
+
+    $(document).ready(() => {
+        $('#submitButton').on('click', (e) => {
+            e.preventDefault(); //cancel the default form submission
+            console.log("submit button clicked");
+        // your code here
+            let cityName = $('#city').val();
+            let stateCode = $( "#state option:selected" ).text();
+            let lon , lat;
+        
+        //validate cityName is not empty or a number in order to continue, otherwise alert error.
+            if(cityName.length === 0 || !isNaN(cityName)){
+                alert("Please enter a valid city name to continue.");
+                return;
+            }
+        //API CALLS
+            let result = fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${cityName},${stateCode}&limit=1&appid=${API_KEY1}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    let state = data[0]['state'];
+                    if (state === stateCode) {                    
+                        lon = data[0]['lon']; 
+                        lat = data[0]['lat'];
+                        return fetch(`https://api.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${lon}&cnt=5&appid=${API_KEY1}`)
+                    } else{
+                        alert("The city you have entered is not located in the selected state. Please try again");
+                        return;
+                    }
+                })
+                .then((response) => response.json())
+                .catch((err) => {
+                    console.log("err");
+                    alert("The forecast data could not be retrieved. Please review the city/state values and try again.");
+                })
+        //Gather weather data from API response and add it to the table
+            const weatherForecast = async () => {
+                const res = await result;
+                if (res == null){
+                    return;
+                }
+                const displayData = () => {
+                    const table = $("#weather_table"); //select the HTML table element with id: weather_table
+                    //create headers
+                    let headerRow = document.createElement("TR");
+                    let dateHeader= document.createElement("th");
+                    let imageHeader= document.createElement("th");
+                    let minTempHeader= document.createElement("th");
+                    let maxTempHeader= document.createElement("th");
+                    let humidityHeader= document.createElement("th");
+                    let descriptionHeader= document.createElement("th");
+                    dateHeader.innerHTML= "Date";
+                    minTempHeader.innerHTML= "Min Temp(F)";
+                    maxTempHeader.innerHTML= "Max Temp(F)";
+                    humidityHeader.innerHTML= "Humidity";
+                    descriptionHeader.innerHTML= "Forecast";
+                    headerRow.append( imageHeader,dateHeader,descriptionHeader,minTempHeader,maxTempHeader,humidityHeader);  //append all headers to row
+                    table.append(headerRow);//append the row to the table
+                    //create a row for each day in forecast.
+                    for (let i = 0; i < res.list.length; i++){
+                        let dayRow = document.createElement("TR");
+                        let date = document.createElement("td");
+                        let icon = document.createElement("td");
+                        let min = document.createElement("td");
+                        let max = document.createElement("td");
+                        let humidity = document.createElement("td");
+                        let description = document.createElement("td");
+                        date.innerHTML = convertDate(res.list[i].dt);
+                        min.innerHTML = kelvinToF(res.list[i].temp.min);
+                        max.innerHTML = kelvinToF(res.list[i].temp.max);
+                        humidity.innerHTML = res.list[i].humidity;
+                        description.innerHTML = res.list[i].weather[0].description;
+                        let iconImage = getIcon(res.list[i].weather[0].icon)
+                        icon.appendChild(iconImage)
+                        dayRow.append(icon,date,description,min,max,humidity);  //append all cells to row
+                        table.append(dayRow);//append the row to the table
+                    }
+                    table.css("visibility", "visible");
+                }
+                displayData();
+            }
+            weatherForecast()
+            $('#submitButton').attr('disabled','disabled');
+
+        });
+        $('#resetButton').on('click', (e) => {
+            const myTable = $("#weather_table");
+            $("tr").remove();
+            $('input').val('');
+            $('#submitButton').removeAttr('disabled');
+        })
+    });
+</script>
+</body>
+</html>
+
+
